@@ -1,0 +1,1 @@
+Just write into the following textbox to create your own stamp for your source files. To bind the correct name, email and date entered in the actual application just use the following names [NAME] [DATE] [EMAIL]. When the license is then added to the source code these values are then replaced with the ones specified in the actual application.

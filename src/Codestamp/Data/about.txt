@@ -1,0 +1,1 @@
+This program is a simple stamping application which allows you to stamp licenses on your source code with little effort.

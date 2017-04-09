@@ -1,0 +1,20 @@
+﻿<Window x:Class="CodeStamp.Windows.CreateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create Window" Height="300" Width="400" Background="#333333" Icon="../Icons/folder.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="270*"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+        <Viewbox Stretch="Uniform">
+            <TextBox Name="LicenseTextBox" AcceptsTab="True" AcceptsReturn="True" BorderThickness="0" BorderBrush="Transparent" Text="Click here and start writing your own license." Background="Transparent" Foreground="White"></TextBox>
+        </Viewbox>
+        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1920">
+            <MenuItem Name="Save" Click="SaveOnClick" Header="Save"></MenuItem>
+            <MenuItem Name="Help" Click="HelpOnClick" Header="Help"></MenuItem>
+            <MenuItem Name="Exit" Click="ExitOnClick" Header="Exit"></MenuItem>
+        </Menu>
+
+    </Grid>
+</Window>
