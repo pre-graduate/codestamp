@@ -1,4 +1,3 @@
-using static CodeStamp.Classes.Alerts;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -39,7 +38,7 @@ namespace CodeStamp.Classes
             return parsedLicense;
         }
 
-        public void RemoveLicense(string[] files)
+        public bool RemoveLicense(string[] files)
         {
             try
             {
@@ -71,12 +70,13 @@ namespace CodeStamp.Classes
                     File.WriteAllLines(file, stringLines.ToArray());
                 }
 
-                ShowSuccess("Finished !", "We have successfully removed the license");
+                return true;
             }
             catch(Exception)
-            {
-                ShowError("Error!", "The program encountered an error and hasnt removed the license.");
+            {  
             }
+
+            return false;
         }
 
         public int HasLicenses(string[] files)
@@ -106,7 +106,7 @@ namespace CodeStamp.Classes
             return foundLicenses;
         }
 
-        public void PrintLicense(string licensePath, string[] files)
+        public bool PrintLicense(string licensePath, string[] files)
         {
             try
             {
@@ -124,12 +124,13 @@ namespace CodeStamp.Classes
                     File.WriteAllLines(file, mergedText.ToArray());
                 }
 
-                ShowSuccess("Finished!", "We have inserted the license into all source files!");
+                return true;
             }
             catch(Exception)
-            {
-                ShowError("Error!", "The program encountered an error and hasnt stamped the license.");
+            { 
             }
+
+            return false;
         }
     }
 }

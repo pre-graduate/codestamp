@@ -10,7 +10,7 @@ namespace CodeStamp.Classes
         private Dictionary<string, string> Filenames { get; } = new Dictionary<string, string>();
 
         public string[] GetFiles()
-        { 
+        {
             return Filenames.Values.ToArray();
         }
 
@@ -30,7 +30,7 @@ namespace CodeStamp.Classes
             {
                 var filename = Path.GetFileName(filePath);
 
-                if (string.IsNullOrEmpty(filename)) 
+                if (string.IsNullOrEmpty(filename))
                     continue;
 
                 Filenames.Add(filename, filePath);

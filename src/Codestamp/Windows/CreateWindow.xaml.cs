@@ -1,4 +1,5 @@
-using static CodeStamp.Classes.Alerts;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Data;
 using System.Windows;
@@ -8,7 +9,7 @@ namespace CodeStamp.Windows
 {
     using Win32SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-    public partial class CreateWindow : Window
+    public partial class CreateWindow : MetroWindow
     {
         private const string HelpMessageTitle = "How to write a license";
         private const string LicensesLocation = @"Data\Licenses\";
@@ -28,9 +29,9 @@ namespace CodeStamp.Windows
             Close();
         }
 
-        private void HelpOnClick(object sender, RoutedEventArgs e)
+        private async void HelpOnClick(object sender, RoutedEventArgs e)
         {
-           ShowInfo(HelpMessageTitle, string.Join(string.Empty, File.ReadAllLines(HelpLocation)));
+            await this.ShowMessageAsync(HelpMessageTitle, string.Join(string.Empty, File.ReadAllLines(HelpLocation)));
         }
 
         private void SaveOnClick(object sender, RoutedEventArgs e)

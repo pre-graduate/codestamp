@@ -1,10 +1,12 @@
+using MahApps.Metro.Controls;
 using System.Windows;
 using System.IO;
 using System;
 
+
 namespace CodeStamp.Windows
 {
-    public partial class PreviewWindow : Window
+    public partial class PreviewWindow : MetroWindow
     {
         private const string LicenseDirectory = "Data/Licenses/";
         private const string LicenseExtension = ".license";

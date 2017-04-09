@@ -27,7 +27,7 @@ namespace CodeStamp.Classes
         {
             comboBox.Items.Clear();
 
-            foreach(var license in LicenseFilenames)
+            foreach (var license in LicenseFilenames)
             {
                 comboBox.Items.Add(Path.GetFileNameWithoutExtension(license));
             }

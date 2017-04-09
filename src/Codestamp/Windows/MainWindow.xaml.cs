@@ -3,13 +3,14 @@ using System.IO;
 using System;
 using System.Diagnostics;
 using CodeStamp.Classes;
-using static CodeStamp.Classes.Alerts;
 
 namespace CodeStamp.Windows
 {
     using Win32OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+    using MahApps.Metro.Controls;
+    using MahApps.Metro.Controls.Dialogs;
 
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private PreviewWindow LicensePreviewWindow { get; set; }
         private CreateWindow LicenseCreateWindow { get; set; }
@@ -18,7 +19,7 @@ namespace CodeStamp.Windows
         private FilePrinter LicensePrinter { get; } = new FilePrinter();
         private FileList CodeFileList { get; } = new FileList();
 
-        private const string WebsiteUpdateLink = "https://github.com/william-taylor/cs-experiments";
+        private const string WebsiteUpdateLink = "https://github.com/william-taylor/codestamp";
         private const string LicenseDirectory = "./Data/Licenses/";
         private const string AboutFileLink = "Data/About.txt";
 
@@ -42,20 +43,20 @@ namespace CodeStamp.Windows
             FileList.Items.Clear();
         }
 
-        private void RemoveFile(object sender, RoutedEventArgs e)
+        private async void RemoveFile(object sender, RoutedEventArgs e)
         {
-            if(FileList.SelectedItem != null)
+            if (FileList.SelectedItem != null)
             {
                 CodeFileList.RemoveItem(FileList.SelectedItem.ToString());
                 FileList.Items.Remove(FileList.SelectedItem.ToString());
             }
             else
             {
-                ShowInfo("No File Selected!", "Please select a file in the list to the left.");
+                await this.ShowMessageAsync("No File Selected!", "Please select a file in the list to the left.");
             }
         }
 
-        private void PreviewClick(object sender, RoutedEventArgs e)
+        private async void PreviewClick(object sender, RoutedEventArgs e)
         {
             if (LicenseListComboBox.SelectedIndex != -1)
             {
@@ -65,7 +66,7 @@ namespace CodeStamp.Windows
             }
             else
             {
-                ShowInfo("No License Selected", "Please choose a license to preview it.");
+                await this.ShowMessageAsync("No License Selected", "Please choose a license to preview it.");
             }
         }
 
@@ -75,15 +76,15 @@ namespace CodeStamp.Windows
             LicenseCreateWindow?.Close();
         }
 
-        private void InsertLicenseClick(object sender, RoutedEventArgs e)
+        private async void InsertLicenseClick(object sender, RoutedEventArgs e)
         {
             if (LicenseListComboBox.SelectedIndex != -1)
             {
                 if (FileList.Items.Count > 0)
                 {
-                    var boxResult = ShowYesNo("Are you sure?", "We will now insert the license into all the files listed, are you sure?");
+                    var boxResult = await this.ShowMessageAsync("Are you sure?", "We will now insert the license into all the files listed, are you sure?", MessageDialogStyle.AffirmativeAndNegative);
 
-                    if (boxResult != MessageBoxResult.Yes)
+                    if (boxResult != MessageDialogResult.Affirmative)
                     {
                         return;
                     }
@@ -93,27 +94,36 @@ namespace CodeStamp.Windows
                     LicensePrinter.Email = EmailTextBlock.Text;
                     LicensePrinter.Name = NameTextBlock.Text;
                     LicensePrinter.Date = DateTextBlock.Text;
-                    LicensePrinter.PrintLicense(LicenseList.GetFullFilename(path), CodeFileList.GetFiles());
+
+                    var success = LicensePrinter.PrintLicense(LicenseList.GetFullFilename(path), CodeFileList.GetFiles());
+
+                    if (success)
+                    {
+                        await this.ShowMessageAsync("Finished!", "We have inserted the license into all source files!");
+                    }
+                    else
+                    {
+                        await this.ShowMessageAsync("Error!", "The program encountered an error and hasnt stamped the license.");
+                    }
                 }
                 else
                 {
-                    ShowInfo("No Files!", "Please open some files to insert the license into.");
+                    await this.ShowMessageAsync("No Files!", "Please open some files to insert the license into.");
                 }
             }
             else
             {
-                ShowInfo("No License", "Please choose a license push it to your source files.");
+                await this.ShowMessageAsync("No License", "Please choose a license push it to your source files.");
             }
-            
         }
 
-        private void FindButtonClick(object sender, RoutedEventArgs e)
+        private async void FindButtonClick(object sender, RoutedEventArgs e)
         {
             var files = CodeFileList.GetFiles();
 
             if (files.Length == 0)
             {
-                ShowInfo("No Files", "No files to check");
+                await this.ShowMessageAsync("No Files", "No files to check");
             }
             else
             {
@@ -121,27 +131,36 @@ namespace CodeStamp.Windows
 
                 if (files.Length == filesWithLicensesCount)
                 {
-                    ShowSuccess("Success", "We found a licence in all files");
+                    await this.ShowMessageAsync("Success", "We found a licence in all files");
                 }
                 else
                 {
-                    ShowSuccess("Success","We found a licence in " + filesWithLicensesCount + " out of the " + files.Length + " files");
+                    var body = "We found a licence in " + filesWithLicensesCount + " out of the " + files.Length + " files";
+
+                    await this.ShowMessageAsync("Success", body);
                 }
             }
-           
+
         }
 
-        private void RemoveButtonClick(object sender, RoutedEventArgs e)
+        private async void RemoveButtonClick(object sender, RoutedEventArgs e)
         {
             var files = CodeFileList.GetFiles();
 
             if (files.Length == 0)
             {
-                MessageBox.Show("No files to remote the license from.");
+                await this.ShowMessageAsync("Error", "No files to remove the license from.");
             }
             else
             {
-                LicensePrinter.RemoveLicense(files);
+                if (LicensePrinter.RemoveLicense(files))
+                {
+                    await this.ShowMessageAsync("Finished !", "We have successfully removed the license");
+                }
+                else
+                {
+                    await this.ShowMessageAsync("Error!", "The program encountered an error and hasnt removed the license.");
+                }
             }
         }
 
@@ -166,10 +185,11 @@ namespace CodeStamp.Windows
             }
         }
 
-        private void AboutItemOnClick(object sender, RoutedEventArgs e)
+        private async void AboutItemOnClick(object sender, RoutedEventArgs e)
         {
             var aboutTextArray = File.ReadAllLines(AboutFileLink);
-            ShowInfo("About CodeStamp", string.Join("", aboutTextArray));
+
+            await this.ShowMessageAsync("About CodeStamp", string.Join("", aboutTextArray));
         }
 
         private void UpdateItemOnClick(object sender, RoutedEventArgs e)
