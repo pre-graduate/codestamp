@@ -1,7 +1,7 @@
 
-<img src='preview.gif' />
+<img src='icons/preview.gif' />
 
-<img src='icon.png' width='150' height='150' align='right' />
+<img src='icons/icon.png' width='150' height='150' align='right' />
 
 # Codestamp
 
