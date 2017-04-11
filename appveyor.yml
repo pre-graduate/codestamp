@@ -1,3 +1,4 @@
 configuration: Release
 before_build:
+  - cd app
   - nuget restore
